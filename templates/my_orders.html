@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Pedidos</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1>Meus Pedidos</h1>
+    <table class="table">
+        <tbody>
+            <ul class="list-group">
+                {% for order in orders %}
+                    <li class="list-group-item">
+                        <strong>Pedido ID:</strong> {{ order.id }} - <strong>Status:</strong> {{ order.status }} - <strong>Total:</strong> R$ {{ order.total|round(2) }}
+                        <ul>
+                            {% for order_product in order.products %}
+                                <li>{{ order_product.product.name }} - R$ {{ order_product.product.price }} - Quantidade: {{ order_product.quantity }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% if order.status == 'pedido realizado' %}
+                        <a href="{{ url_for('edit_order_items', order_id=order.id) }}">Editar Itens</a>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+            
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

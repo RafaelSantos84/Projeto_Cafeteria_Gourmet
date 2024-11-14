@@ -1,0 +1,26 @@
+<h1>Pedidos Admin</h1>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Usuário</th>
+        <th>Status</th>
+        <th>Ações</th>
+    </tr>
+    {% for order in orders %}
+    <tr>
+        <td>{{ order.id }}</td>
+        <td>{{ order.user_id }}</td>  <!-- Exiba o ID ou informações do usuário -->
+        <td>{{ order.status }}</td>
+        <td>
+            <form action="{{ url_for('update_order_status', order_id=order.id) }}" method="POST">
+                <select name="status">
+                    <option value="pedido realizado">Pedido Realizado</option>
+                    <option value="pedido entregue">Pedido Entregue</option>
+                    <option value="pedido cancelado">Pedido Cancelado</option>
+                </select>
+                <input type="submit" value="Atualizar Status">
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>

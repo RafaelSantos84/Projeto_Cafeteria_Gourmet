@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Itens do Pedido</title>
+</head>
+<body>
+<h1>Editar Itens do Pedido #{{ order.id }}</h1>
+<form method="POST">
+    <table>
+        <tr>
+            <th>ID do Produto</th>
+            <th>Nome do Produto</th>
+            <th>Quantidade</th>
+        </tr>
+        {% for item in order.products %}
+        <tr>
+            <td>{{ item.product_id }}</td>  <!-- Use product_id -->
+            <td>{{ item.product.name }}</td>
+            <td>
+                <input type="number" name="quantity_{{ item.product_id }}" value="{{ item.quantity }}" min="1" required>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <input type="submit" value="Atualizar Itens">
+</form>
+</body>
+</html>
+

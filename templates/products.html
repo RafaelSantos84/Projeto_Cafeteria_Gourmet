@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-info" role="alert">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    {% if current_user.role == 'admin' %}
+        <h1>Cadastrar Produto</h1>
+        <form action="{{ url_for('products') }}" method="POST" class="mb-3">
+            <div class="form-group">
+                <input type="text" class="form-control" name="name" placeholder="Nome do Produto" required>
+            </div>
+            <div class="form-group">
+                <input type="number" class="form-control" step="0.01" name="price" placeholder="Preço" required>
+            </div>
+            <div class="form-group">
+                <textarea class="form-control" name="description" placeholder="Descrição do Produto"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Cadastrar</button>
+        </form>
+    {% endif %}
+    
+    <h1>Lista de Produtos</h1>
+    <form action="{{ url_for('order') }}" method="POST">
+        <ul class="list-group">
+            {% for product in products %}
+                <li class="list-group-item">
+                    <input type="checkbox" name="product_ids" value="{{ product.id }}">
+                    <strong>{{ product.name }}</strong> - R$ {{ product.price }} - {{ product.description }}
+                    <input type="number" name="quantities" value="1" min="1" required style="width: 60px; margin-left: 10px;">
+                </li>
+            {% endfor %}
+        </ul>
+        <button type="submit" class="btn btn-success">Realizar Pedido</button>
+    </form>
+</div>
+</body>
+</html>
