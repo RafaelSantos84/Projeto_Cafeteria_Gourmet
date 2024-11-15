@@ -1,13 +1,14 @@
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Itens do Pedido</title>
-</head>
-<body>
-<h1>Editar Itens do Pedido #{{ order.id }}</h1>
-<form method="POST">
+{% extends "index.html" %}
+
+{% block titulo %}
+Editar Itens do Pedido
+{% endblock %}
+
+{% block body %}
+<a href="{{ url_for('my_orders') }}" class="link-nav">Meus Pedidos</a>
+
+<form method="POST" class="popup">
+    <h1>Editar Itens do Pedido #{{ order.id }}</h1>
     <table>
         <tr>
             <th>ID do Produto</th>
@@ -19,13 +20,11 @@
             <td>{{ item.product_id }}</td>  <!-- Use product_id -->
             <td>{{ item.product.name }}</td>
             <td>
-                <input type="number" name="quantity_{{ item.product_id }}" value="{{ item.quantity }}" min="1" required>
+                <input type="number" name="quantity_{{ item.product_id }}" value="{{ item.quantity }}" min="1" required class="input">
             </td>
         </tr>
         {% endfor %}
     </table>
-    <input type="submit" value="Atualizar Itens">
+    <input type="submit" value="Atualizar Itens" class="botao-arquivo">
 </form>
-</body>
-</html>
-
+{% endblock %}

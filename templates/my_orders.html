@@ -1,12 +1,14 @@
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meus Pedidos</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
+{% extends "index.html" %}
+
+{% block title %}
+Meus Pedidos
+{% endblock %}
+
+{% block body %}
+<a href="{{ url_for('products') }}" class="link-nav">Produtos</a>
+|
+<a href="{{ url_for('logout') }}" class="link-nav">Sair</a>
+
 <div class="container">
     <h1>Meus Pedidos</h1>
     <table class="table">
@@ -30,5 +32,4 @@
         </tbody>
     </table>
 </div>
-</body>
-</html>
+{% endblock %}

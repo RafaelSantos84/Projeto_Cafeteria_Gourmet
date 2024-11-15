@@ -4,11 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <title>Cafeteria Gourmet</title>
+    <title>
+        {% block title %}
+        Cafeteria Gourmet
+        {% endblock %}
+    </title>
 </head>
 <body>
+
+    {% block body %}
     <h1>Bem-vindo à Cafeteria Gourmet</h1>
-    <a href="{{ url_for('login') }}">Login</a>
-    <a href="{{ url_for('register') }}">Registrar</a>
+    <br>
+    <a href="{{ url_for('login') }}" class="link-nav">Login</a>
+    <a href="{{ url_for('register') }}" class="link-nav">Registrar</a>
+    {% endblock %}
+
 </body>
 </html>

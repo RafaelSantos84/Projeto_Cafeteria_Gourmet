@@ -1,15 +1,16 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-</head>
-<body>
+{% extends "index.html" %}
+{% block title %}
+Login
+{% endblock %}
+
+{% block body %}
+<a href ="{{ url_for('index') }}" class="link-nav">Home</a>
+|
+<a href ="{{ url_for('register') }}" class="link-nav">Registrar</a>
+<form method="POST" class="popup">
     <h1>Login</h1>
-    <form method="POST">
-        <input type="text" name="username" placeholder="Usuário" required>
-        <input type="password" name="password" placeholder="Senha" required>
-        <button type="submit">Entrar</button>
-    </form>
-</body>
-</html>
+    <input type="text" name="username" placeholder="Usuário" required class="input">
+    <input type="password" name="password" placeholder="Senha" required class="input">
+    <button type="submit" class="botao-login">Entrar</button>
+</form>
+{% endblock %}
