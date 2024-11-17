@@ -195,6 +195,7 @@ th {
 }
 
 .bloco-arquivo {
+  flex: 1;
   background-color: #eee;
   padding: 10px 20px;
   border-radius: 25px;
