@@ -3,10 +3,16 @@
 Login
 {% endblock %}
 
+{% block navbar %}
+<nav>
+    <ul class="menu">
+        <li><a href ="{{ url_for('index') }}" class="link-nav">Home</a></li>
+        <li><a href ="{{ url_for('register') }}" class="link-nav">Registrar</a></li>
+    </ul>
+</nav>
+{% endblock %}
+
 {% block body %}
-<a href ="{{ url_for('index') }}" class="link-nav">Home</a>
-|
-<a href ="{{ url_for('register') }}" class="link-nav">Registrar</a>
 <form method="POST" class="popup">
     <h1>Login</h1>
     <input type="text" name="username" placeholder="Usuário" required class="input">

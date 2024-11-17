@@ -11,13 +11,40 @@
     </title>
 </head>
 <body>
+    <div class="corpo-body">
+    {% block navbar %}
+    <nav>
+        <ul class="menu">
+            <li><a href="{{ url_for('login') }}" class="link-nav">Login</a></li>
+            <li><a href="{{ url_for('register') }}" class="link-nav">Registrar</a></li>
+        </ul>
+    </nav>
+    {% endblock %}
+    
+    <div style="text-align: center;">
+        <img src="/static/images/logo.jpg" alt="Logo da cafeteria gourmet" class="logo-cafereria">
+        <br>
+        {% if current_user.is_authenticated %}    
+        <h1>Olá, {{ current_user.username }}!</h1>
+        {% endif %}
+        
+        {% if pagina == 'index' %}
+        <h1>Bem-vindo à Cafeteria Gourmet</h1>
+        {% endif %}
+    </div>   
 
     {% block body %}
-    <h1>Bem-vindo à Cafeteria Gourmet</h1>
-    <br>
-    <a href="{{ url_for('login') }}" class="link-nav">Login</a>
-    <a href="{{ url_for('register') }}" class="link-nav">Registrar</a>
     {% endblock %}
 
+    <br>
+
+        {% if pagina == 'index' %}
+            {% include "conteudo.html" %}
+        {% endif %}
+        <div class="footer">
+            Newsletter | Receitas e Dicas | Promoções | FAQ | Redes Sociais | Contato | Termos de Uso | Politica de Privacidade
+        </div>
+        <br>
+    </div>
 </body>
 </html>

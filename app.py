@@ -38,8 +38,9 @@ class Product(db.Model):
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    products = db.relationship('OrderProduct', backref='order')  # Atualize esta linha
-    status = db.Column(db.String(20), default='pedido realizado')  # Adicione esta linha
+    user = db.relationship('User', backref='orders')
+    products = db.relationship('OrderProduct', backref='order')
+    status = db.Column(db.String(20), default='pedido realizado')
 
 
     @property
@@ -62,7 +63,7 @@ def load_user(user_id):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', pagina='index')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():

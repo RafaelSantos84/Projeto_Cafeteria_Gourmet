@@ -4,52 +4,53 @@
 Produtos
 {% endblock %}
 
-{% block body %}
-<a href="{{ url_for('my_orders') }}" class="link-nav">Meus Pedidos</a>
-|
-<a href="{{ url_for('logout') }}" class="link-nav">Sair</a>
-
-
-<div class="container">
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <div class="alert alert-info" role="alert">
-                {% for message in messages %}
-                    {{ message }}
-                {% endfor %}
-            </div>
+{% block navbar %}
+<nav>
+    <ul class="menu">
+        <li><a href="{{ url_for('my_orders') }}" class="link-nav">Meus Pedidos</a></li>
+        {% if current_user.role == 'admin' %}
+            <li><li><a href="{{ url_for('admin_orders') }}" class="link-nav">Controle de Pedidos Admin</a></li>
         {% endif %}
-    {% endwith %}
+        <li><a href="{{ url_for('logout') }}" class="link-nav">Sair</a></li>
+    </ul>
+</nav>
+{% endblock %}
 
-    {% if current_user.role == 'admin' %}
-    <form action="{{ url_for('products') }}" method="POST" class="popup">
-            <h1>Cadastrar Produto</h1>
-            <div class="form-group">
-                <input type="text" name="name" placeholder="Nome do Produto" required  class="input">
-            </div>
-            <div class="form-group">
-                <input type="number" step="0.01" name="price" placeholder="Preço" required class="input">
-            </div>
-            <div class="form-group">
-                <textarea class="input" name="description" placeholder="Descrição do Produto"></textarea>
-            </div>
-            <button type="submit" class="botao-arquivo">Cadastrar</button>
-        </form>
-    {% endif %}
-    
-    
-    <form action="{{ url_for('order') }}" method="POST">
-        <ul class="popup">
-            <h1>Lista de Produtos</h1>
-            {% for product in products %}
-                <li>
-                    <input type="checkbox" name="product_ids" value="{{ product.id }}">
-                    <strong>{{ product.name }}</strong> - R$ {{ product.price }} - {{ product.description }}
-                    <input type="number" name="quantities" value="1" min="1" required style="width: 60px; margin-left: 10px;" class="input">
-                </li>
-            {% endfor %}
-            <button type="submit" class="botao-arquivo">Realizar Pedido</button>
-        </ul>
+{% block body %}
+{% if current_user.role == 'admin' %}
+    {% include 'products_admin.html' %}
+{% endif %}
+<br>
+
+<div class="bloco-arquivo">
+<table>
+<tr>
+    <th> Produto </th>
+    <th> Valor </th>
+    <th> Descrição </th>
+    <th> Quantidade </th>
+</tr>
+{% for product in products %}
+<tr>
+    <td> <input type="checkbox" name="product_ids" value="{{ product.id }}"> <strong>{{ product.name }}</strong></td>
+    <td> R$ {{ product.price }} </td>
+    <td> {{ product.description }} </td>
+    <td> <input type="number" name="quantities" value="1" min="1" required style="width: 60px; margin-left: 10px;" class="input2"> </td>
+    {% endfor %} 
+</tr>
+</table>
+<button type="submit" class="botao-arquivo">Realizar Pedido</button>
     </form>
 </div>
 {% endblock %}
+
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="alert alert-info" role="alert">
+    {% for message in messages %}
+    {{ message }}
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}

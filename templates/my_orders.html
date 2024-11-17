@@ -4,32 +4,47 @@
 Meus Pedidos
 {% endblock %}
 
-{% block body %}
-<a href="{{ url_for('products') }}" class="link-nav">Produtos</a>
-|
-<a href="{{ url_for('logout') }}" class="link-nav">Sair</a>
+{% block navbar %}
+<nav>
+    <ul class="menu">
+        <li><a href="{{ url_for('products') }}" class="link-nav">Produtos</a></li>
+        <li><a href="{{ url_for('logout') }}" class="link-nav">Sair</a></li>
+    </ul>
+</nav>
+{% endblock %}
 
-<div class="container">
+{% block body %}
+<div class="bloco-arquivo">
     <h1>Meus Pedidos</h1>
-    <table class="table">
-        <tbody>
-            <ul class="list-group">
-                {% for order in orders %}
-                    <li class="list-group-item">
-                        <strong>Pedido ID:</strong> {{ order.id }} - <strong>Status:</strong> {{ order.status }} - <strong>Total:</strong> R$ {{ order.total|round(2) }}
-                        <ul>
-                            {% for order_product in order.products %}
-                                <li>{{ order_product.product.name }} - R$ {{ order_product.product.price }} - Quantidade: {{ order_product.quantity }}</li>
-                            {% endfor %}
-                        </ul>
-                        {% if order.status == 'pedido realizado' %}
-                        <a href="{{ url_for('edit_order_items', order_id=order.id) }}">Editar Itens</a>
-                        {% endif %}
-                    </li>
-                {% endfor %}
-            </ul>
+    <table>
+        <tr>
+            <th>Pedido</th>
+            <th>Itens / Valor / Quantidade</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Ações</th>
+        </tr>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.id }}</td>
             
-        </tbody>
+            <td><ul class="lista-sem-marcacao">
+                {% for order_product in order.products %}
+                    <li>{{ order_product.product.name }} - R$ {{ order_product.product.price }} - Quantidade: {{ order_product.quantity }}</li>
+                {% endfor %}
+            </ul></td>
+
+            <td>R$ {{ order.total|round(2) }}</td>
+            
+            <td>{{ order.status }}</td>
+            
+            <td>{% if order.status == 'pedido realizado' %}
+                <a href="{{ url_for('edit_order_items', order_id=order.id) }}" class="link-nav">Editar Itens</a>
+                {% else %}
+                Não há ações
+                {% endif %}</td>
+        {% endfor %}
+        </tr>       
     </table>
 </div>
 {% endblock %}

@@ -1,12 +1,18 @@
 {% extends "index.html" %}
 
-{% block titulo %}
+{% block title %}
 Editar Itens do Pedido
 {% endblock %}
 
-{% block body %}
-<a href="{{ url_for('my_orders') }}" class="link-nav">Meus Pedidos</a>
+{% block navbar %}
+<nav>
+    <ul class="menu">
+        <li><a href="{{ url_for('my_orders') }}" class="link-nav">Meus Pedidos</a></li>
+    </ul>
+</nav>
+{% endblock %}
 
+{% block body %}
 <form method="POST" class="popup">
     <h1>Editar Itens do Pedido #{{ order.id }}</h1>
     <table>

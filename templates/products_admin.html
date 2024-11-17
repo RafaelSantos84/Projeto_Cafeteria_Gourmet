@@ -1,0 +1,20 @@
+<div class="bloco-arquivo">
+
+    <form action="{{ url_for('products') }}" method="POST" class="popup">
+            <h1>Cadastrar Produto</h1>
+            <div class="form-group">
+                <input type="text" name="name" placeholder="Nome do Produto" required  class="input">
+            </div>
+            <div class="form-group">
+                <input type="number" step="0.01" name="price" placeholder="Preço" required class="input">
+            </div>
+            <div class="form-group">
+                <textarea class="input" name="description" placeholder="Descrição do Produto"></textarea>
+            </div>
+            <button type="submit" class="botao-arquivo">Cadastrar</button>
+        </form>
+        <br>        
+    <form action="{{ url_for('order') }}" method="POST">
+
+
+</div>
