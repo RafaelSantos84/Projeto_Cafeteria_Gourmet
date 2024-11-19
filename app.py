@@ -2,11 +2,11 @@ from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your_secret_key'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-db = SQLAlchemy(app)
-login_manager = LoginManager(app)
+aplication = Flask(__name__)
+aplication.config['SECRET_KEY'] = 'your_secret_key'
+aplication.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+db = SQLAlchemy(aplication)
+login_manager = LoginManager(aplication)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -61,11 +61,11 @@ class OrderProduct(db.Model):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-@app.route('/')
+@aplication.route('/')
 def index():
     return render_template('index.html', pagina='index')
 
-@app.route('/register', methods=['GET', 'POST'])
+@aplication.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         username = request.form['username']
@@ -76,7 +76,7 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html')
 
-@app.route('/products', methods=['GET', 'POST'])
+@aplication.route('/products', methods=['GET', 'POST'])
 @login_required
 def products():
     if request.method == 'POST':
@@ -91,7 +91,7 @@ def products():
     products = Product.query.all()
     return render_template('products.html', products=products)
 
-@app.route('/order', methods=['POST'])
+@aplication.route('/order', methods=['POST'])
 @login_required
 def order():
     product_ids = request.form.getlist('product_ids')  # Recebe os IDs dos produtos selecionados
@@ -112,7 +112,7 @@ def order():
 
 
 
-@app.route('/update_order_status/<int:order_id>', methods=['POST'])
+@aplication.route('/update_order_status/<int:order_id>', methods=['POST'])
 @login_required
 def update_order_status(order_id):
     if current_user.role != 'admin':  # Verifica se o usuário é admin
@@ -127,7 +127,7 @@ def update_order_status(order_id):
     return "Pedido não encontrado", 404
 
 
-@app.route('/admin_orders')
+@aplication.route('/admin_orders')
 @login_required
 def admin_orders():
     if current_user.role != 'admin':  # Verifica se o usuário é admin
@@ -137,7 +137,7 @@ def admin_orders():
     return render_template('admin_orders.html', orders=orders)  # Renderiza o template com todos os pedidos
 
 
-@app.route('/my_orders')
+@aplication.route('/my_orders')
 @login_required
 def my_orders():
     orders = Order.query.filter_by(user_id=current_user.id).all()
@@ -153,7 +153,7 @@ def my_orders():
 
 
 # Rota para editar os itens do pedido - CORRIGIR (meu pedido não tem quantidade)
-@app.route('/edit_order_items/<int:order_id>', methods=['GET', 'POST'])
+@aplication.route('/edit_order_items/<int:order_id>', methods=['GET', 'POST'])
 @login_required
 def edit_order_items(order_id):
     order = Order.query.get(order_id)
@@ -175,7 +175,7 @@ def edit_order_items(order_id):
 
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@aplication.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
@@ -186,13 +186,13 @@ def login():
             return redirect(url_for('products'))
     return render_template('login.html')
 
-@app.route('/logout')
+@aplication.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
-    with app.app_context():
+    with aplication.app_context():
         db.create_all()  # Criar o banco de dados
-    app.run(debug=True)
+    aplication.run(debug=True)
