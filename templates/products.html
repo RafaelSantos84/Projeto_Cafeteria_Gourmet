@@ -24,24 +24,24 @@ Produtos
 
 <div class="bloco-arquivo">
 <form method="POST" class="popup">
-<table>
-<tr>
-    <th> Produto </th>
-    <th> Valor </th>
-    <th> Descrição </th>
-    <th> Quantidade </th>
-</tr>
-{% for product in products %}
-<tr>
-    <td> <input type="checkbox" name="product_ids" value="{{ product.id }}"> <strong>{{ product.name }}</strong></td>
-    <td> R$ {{ product.price }} </td>
-    <td> {{ product.description }} </td>
-    <td> <input type="number" name="quantities" value="1" min="1" required style="width: 60px; margin-left: 10px;" class="input2"> </td>
-    {% endfor %} 
-</tr>
-</table>
-<button type="submit" class="botao-arquivo">Realizar Pedido</button>
-    </form>
+    <table>
+    <tr>
+        <th> Produto </th>
+        <th> Valor </th>
+        <th> Descrição </th>
+        <th> Quantidade </th>
+    </tr>
+    {% for product in products %}
+    <tr>
+        <td> <input type="checkbox" name="product_ids" value="{{ product.id }}"> <strong>{{ product.name }}</strong></td>
+        <td> R$ {{ product.price }} </td>
+        <td> {{ product.description }} </td>
+        <td> <input type="number" name="quantities" value="1" min="1" required style="width: 60px; margin-left: 10px;" class="input2"> </td>
+        {% endfor %} 
+    </tr>
+    </table>
+    <button type="submit" class="botao-arquivo">Realizar Pedido</button>
+</form>
 </div>
 {% endblock %}
 
