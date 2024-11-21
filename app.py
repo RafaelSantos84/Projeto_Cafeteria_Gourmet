@@ -187,7 +187,6 @@ def admin_orders():
     if current_user.role != 'admin':  # Verifica se o usuário é admin
         return "Acesso negado", 403  # Retorna erro se não for admin
     orders = Order.query.all()  # Obtém todos os pedidos
-    flash('Estatus da compra alterada!', 'success')
     return render_template('admin_orders.html', orders=orders)  # Renderiza o template com todos os pedidos
 
 
