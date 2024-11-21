@@ -172,11 +172,11 @@ def my_data():
                 flash('Senha alterada com sucesso!', 'success')
                 return render_template('my_data.html')
             else:
-                flash('Senhas diferentes', 'error')
+                flash('Informações incorretas', 'error')
                 return render_template('my_data.html')
                 
         else:
-            flash('Senha incorreta', 'error')
+            flash('Informações incorretas', 'error')
             return render_template('my_data.html')
             
     return render_template('my_data.html')
@@ -238,6 +238,8 @@ def login():
         if user and user.password == password:  # Verificação simplificada
             login_user(user)
             return redirect(url_for('products'))
+        else:
+            flash('Informações incorretas!', 'error')
     return render_template('login.html')
 
 @app.route('/logout')
