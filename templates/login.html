@@ -13,6 +13,17 @@ Login
 {% endblock %}
 
 {% block body %}
+<br>
+{% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+<br>
 <form method="POST" class="popup">
     <h1>Login</h1>
     <input type="text" name="username" placeholder="Usuário" required class="input">
