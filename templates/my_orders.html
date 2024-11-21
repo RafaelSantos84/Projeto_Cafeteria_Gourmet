@@ -8,6 +8,7 @@ Meus Pedidos
 <nav>
     <ul class="menu">
         <li><a href="{{ url_for('products') }}" class="link-nav">Produtos</a></li>
+        <li><a href="{{ url_for('my_data') }}" class="link-nav">Meus Dados</a></li>
         <li><a href="{{ url_for('logout') }}" class="link-nav">Sair</a></li>
     </ul>
 </nav>
@@ -16,11 +17,22 @@ Meus Pedidos
 {% block body %}
 <div class="bloco-arquivo">
     <h1>Meus Pedidos</h1>
+    <br>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     <table>
         <tr>
             <th>Pedido</th>
             <th>Itens / Valor / Quantidade</th>
             <th>Total</th>
+            <th>Forma de Pagamento</th>
             <th>Status</th>
             <th>Ações</th>
         </tr>
@@ -37,6 +49,8 @@ Meus Pedidos
             <td>R$ {{ order.total|round(2) }}</td>
             
             <td>{{ order.status }}</td>
+
+            <td>{{ order.payment_method }}</td>
             
             <td>{% if order.status == 'pedido realizado' %}
                 <a href="{{ url_for('edit_order_items', order_id=order.id) }}" class="link-nav">Editar Itens</a>

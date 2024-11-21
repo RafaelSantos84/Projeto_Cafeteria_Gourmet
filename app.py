@@ -1,9 +1,10 @@
 from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+from datetime import datetime
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your_secret_key'
+app.config['SECRET_KEY'] = '123456789'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
@@ -13,6 +14,16 @@ class User(db.Model):
     username = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(150), nullable=False)
     role = db.Column(db.String(50))  # Ex: 'admin' ou 'user'
+    email = db.Column(db.String(100), nullable=False, unique=True)
+    adress = db.Column(db.String(200), nullable=False)
+    number = db.Column(db.String(10), nullable=False)
+    complement = db.Column(db.String(100))
+    district = db.Column(db.String(100), nullable=False)
+    city = db.Column(db.String(100), nullable=False)
+    state = db.Column(db.String(100), nullable=False)
+    cep = db.Column(db.String(8), nullable=False)
+    phone = db.Column(db.String(15), nullable=False)
+    bhirth = db.Column(db.Date, nullable=False)
 
     def is_authenticated(self):
         return True
@@ -41,6 +52,7 @@ class Order(db.Model):
     user = db.relationship('User', backref='orders')
     products = db.relationship('OrderProduct', backref='order')
     status = db.Column(db.String(20), default='pedido realizado')
+    payment_method = db.Column(db.String(20), default='dinheiro')
 
 
     @property
@@ -70,7 +82,18 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        new_user = User(username=username, password=password)
+        email = request.form['email']
+        adress = request.form['adress']
+        number = request.form['number']
+        complement = request.form['complement']
+        district = request.form['district']
+        city = request.form['city']
+        state = request.form['state']
+        cep = request.form['cep']
+        phone = request.form['phone']
+        bhirth = request.form['bhirth']
+        bhirth = datetime.strptime(bhirth, '%Y-%m-%d').date()
+        new_user = User(username=username, password=password, email=email, adress=adress, number=number, complement=complement, district=district, city=city, state=state, cep=cep, phone=phone, bhirth=bhirth)
         db.session.add(new_user)
         db.session.commit()
         return redirect(url_for('login'))
@@ -86,6 +109,7 @@ def products():
         new_product = Product(name=name, price=price, description=description)
         db.session.add(new_product)
         db.session.commit()
+        flash('Produto cadastrado com sucesso!', 'success')
         return redirect(url_for('products'))
 
     products = Product.query.all()
@@ -96,8 +120,15 @@ def products():
 def order():
     product_ids = request.form.getlist('product_ids')  # Recebe os IDs dos produtos selecionados
     quantities = request.form.getlist('quantities')  # Recebe as quantidades correspondentes
-    order = Order(user_id=current_user.id, status='pedido realizado')  # Define o status aqui
-    
+    payment_method = request.form.get('payment_method')  # Recebe o meio de pagamento selecionado
+
+    # Verifique se há produtos e quantidades selecionados
+    if not product_ids or not quantities:
+        flash('Nenhuma quantidade selecionada!', 'error')
+        return redirect(url_for('products'))
+
+    order = Order(user_id=current_user.id, status='pedido realizado', payment_method=payment_method)  # Define o status aqui
+
     # Adicione o pedido à sessão antes de adicionar os produtos
     db.session.add(order)
     db.session.flush()  # Força o flush para que o order.id seja gerado
@@ -107,9 +138,8 @@ def order():
         db.session.add(order_product)  # Adicione o item do pedido à sessão
     
     db.session.commit()  # Salve tudo no banco de dados
-    flash('Pedido realizado com sucesso!', 'success')
+    flash('Pedido realizado com sucesso!', 'success')  # Exibe uma mensagem de sucesso
     return redirect(url_for('products'))  # Redirecione após a criação do pedido
-
 
 
 @app.route('/update_order_status/<int:order_id>', methods=['POST'])
@@ -126,6 +156,30 @@ def update_order_status(order_id):
         return redirect(url_for('admin_orders'))  # Redirecione para a página de pedidos do admin
     return "Pedido não encontrado", 404
 
+@app.route('/my_data', methods=['GET', 'POST'])
+@login_required
+def my_data():
+    user = User.query.get(current_user.id)
+    user_password = user.password
+    form_password = request.form.get('password')
+    new_password = request.form.get('new_password')
+    confirm_password = request.form.get('confirm_password')
+    if request.method == 'POST':
+        if user_password == form_password:
+            if new_password == confirm_password:
+                user.password = new_password
+                db.session.commit()
+                flash('Senha alterada com sucesso!', 'success')
+                return render_template('my_data.html')
+            else:
+                flash('Senhas diferentes', 'error')
+                return render_template('my_data.html')
+                
+        else:
+            flash('Senha incorreta', 'error')
+            return render_template('my_data.html')
+            
+    return render_template('my_data.html')
 
 @app.route('/admin_orders')
 @login_required
@@ -166,8 +220,8 @@ def edit_order_items(order_id):
                 if quantity is not None:
                     item.quantity = int(quantity)
             db.session.commit()
-            flash('Itens do pedido atualizados com sucesso!', 'success')
-            return redirect(url_for('my_orders'))
+            flash('Iten(s) do pedido atualizado(s) com sucesso!', 'success')
+            return redirect(url_for('my_orders'))  # Redireciona para a página de pedidos do usuário logado ('my_orders')
 
         return render_template('edit_order_items.html', order=order)
     

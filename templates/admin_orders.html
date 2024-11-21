@@ -20,6 +20,7 @@ Controle de Pedidos Admin
         <th>ID do Pedido</th>
         <th>Usuário</th>
         <th>Status</th>
+        <th>Forma de Pagamento</th>
         <th>Ações</th>
     </tr>
     {% for order in orders %}
@@ -27,6 +28,7 @@ Controle de Pedidos Admin
         <td>{{ order.id }}</td>
         <td>{{ order.user.username }}</td>  <!-- Exiba o ID ou informações do usuário -->
         <td>{{ order.status }}</td>
+        <td>{{ order.payment_method }}</td>
         <td>
             <form action="{{ url_for('update_order_status', order_id=order.id) }}" method="POST">
                 <select name="status">

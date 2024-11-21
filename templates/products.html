@@ -11,6 +11,7 @@ Produtos
         {% if current_user.role == 'admin' %}
             <li><li><a href="{{ url_for('admin_orders') }}" class="link-nav">Controle de Pedidos Admin</a></li>
         {% endif %}
+        <li><a href="{{ url_for('my_data') }}" class="link-nav">Meus Dados</a></li>
         <li><a href="{{ url_for('logout') }}" class="link-nav">Sair</a></li>
     </ul>
 </nav>
@@ -23,6 +24,15 @@ Produtos
 <br>
 
 <div class="bloco-arquivo">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 <form action="{{ url_for('order') }}" method="POST">
     <table>
     <tr>
@@ -40,18 +50,22 @@ Produtos
         {% endfor %} 
     </tr>
     </table>
+    <table>
+    <tr>
+        <th> Forma de Pagamento </th>
+    </tr>
+    <td>
+    <select name="payment_method">
+        <option value="Dinheiro">Dinheiro</option>
+        <option value="Cartão de Crédito">Cartão de Crédito</option>
+        <option value="Débito">Débito</option>
+        <option value="Pix">Pix</option>
+    </select><p>
+    </td>
+    </table>
     <button type="submit" class="botao-arquivo">Realizar Pedido</button>
 </form>
+
+
 </div>
 {% endblock %}
-
-
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<div class="alert alert-info" role="alert">
-    {% for message in messages %}
-    {{ message }}
-    {% endfor %}
-</div>
-{% endif %}
-{% endwith %}
