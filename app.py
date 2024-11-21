@@ -186,7 +186,7 @@ def my_data():
 def admin_orders():
     if current_user.role != 'admin':  # Verifica se o usuário é admin
         return "Acesso negado", 403  # Retorna erro se não for admin
-
+    flash('Produto cadastrado com sucesso!', 'success')
     orders = Order.query.all()  # Obtém todos os pedidos
     return render_template('admin_orders.html', orders=orders)  # Renderiza o template com todos os pedidos
 
